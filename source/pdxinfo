@@ -2,5 +2,5 @@ name=AnEnemy
 author=sdwfrost
 description=Sea-anemone territorial warfare. Crank to engorge your venom acrorhagi, lash the rival clone across the no-man's-land, and hold the rock until it deflates.
 bundleID=com.sdwfrost.anenemy
-version=1.0
+version=0.1
 buildNumber=1
