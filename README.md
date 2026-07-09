@@ -1,5 +1,7 @@
 # AnEnemy
 
+> Part of **[plAIdate](https://plaidate.github.io)** — AI-built 1-bit games, ports, and engines for the Playdate.
+
 Sea-anemone territorial warfare, for Playdate.
 
 You command the front-line warrior polyps of a clone colony. Where your clone
