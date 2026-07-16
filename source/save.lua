@@ -10,6 +10,7 @@ function Save.load()
         bestStrains = (d and d.bestStrains) or 0,
         campaignWins = (d and d.campaignWins) or 0,
         campaigns = (d and d.campaigns) or 0,
+        seenTutorial = (d and d.seenTutorial) or false,
     }
 end
 

@@ -82,6 +82,18 @@ Energy: max 100; feeding +~0.85/frame (tide-scaled); holding full charge bleeds
   tide-phase step-sequencer audio.
 - **P5 — Polish. (DONE 2026-07-09)** Procedural 1-bit anemone art (the breathing inflate/deflate is
   the hero visual), title, save/scores, full-game autopilot.
+- **P6 — Depth pass. (DONE 2026-07-16)** The single-note timing loop grows a
+  skill curve. **Variable gap**: the opening spread shifts with the boundary +
+  jitter, so the connect tick moves fight-to-fight. **Positioning** (delivers the
+  P3 d-pad promise): ✛ leans the front line in (closer reach, costs energy, stops
+  feeding) or out (safer, free) — the AI uses it too. **Per-strain AI**: each
+  strain now runs a distinct behaviour PROFILE (cannon over-commits, economy
+  turtles & retreats, attrition holds, boss presses) instead of one shared tree.
+  **Gull counterplay**: Ⓑ braces to deflect the peck (i-frames), so the telegraph
+  finally means something. **Sudden death**: a duel clock erodes tolerance so
+  passive stalemates can't happen. **Spoils**: one player boon per cleared rock
+  (tolerance / damage / feed), stacking per campaign — the first player
+  progression. **UX**: crank-dock indicator + a one-time first-duel tutorial.
 
 ## Art & audio direction
 

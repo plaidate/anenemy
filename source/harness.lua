@@ -57,6 +57,9 @@ function Harness.frame(frame, updateFn)
     if not Harness.strikeShot and G.p and (G.p.state == "striking" or G.r.state == "striking") then
         Harness.strikeShot = true; shot("art-strike")
     end
+    if not Harness.advanceShot and G.p and ((G.p.lean or 0) > 7 or (G.r.lean or 0) > 7) then
+        Harness.advanceShot = true; shot("art-advance")
+    end
     if not Harness.deflateShot and G.p and (G.p.state == "deflating" or G.r.state == "deflating") then
         Harness.deflateShot = true; shot("art-deflate")
     end
@@ -66,6 +69,9 @@ function Harness.frame(frame, updateFn)
     end
     if not Harness.gullShot and G.gull and (G.gull.f or 0) >= C.GULL_DIVE_FRAMES - 6 then
         Harness.gullShot = true; shot("art-gull")
+    end
+    if not Harness.braceShot and G.p and ((G.p.braceT or 0) > 0 or (G.r.braceT or 0) > 0) then
+        Harness.braceShot = true; shot("art-brace")
     end
     -- Phase 4: one shot per rival strain (roster showcase)
     if G.strain and (G.state == "duel" or G.state == "map") and (G.t or 0) > 0.15 then

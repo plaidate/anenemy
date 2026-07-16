@@ -8,6 +8,7 @@
 -- (a lost campaign).
 
 import "CoreLibs/graphics"
+import "CoreLibs/ui"
 
 import "config"
 import "util"
@@ -59,6 +60,7 @@ local function startCampaign()
     G.campaignIdx = (G.campaignIdx or 0) + 1
     G.ladderIdx = 1
     G.campaignResult = nil
+    G.upgrades = { tol = 0, sting = 0, feed = 0 }   -- Phase 4: spoils reset per campaign
     if SMOKE_BUILD then G.smokeFavor = (G.campaignIdx == 1) and 1 or -1 end
     War.start()
 end
@@ -85,10 +87,18 @@ local function tick()
         if advance(true) then startCampaign(); toMap() end
 
     elseif s == "map" then
-        if advance(true) then Duel.start() end
+        if advance(true) then
+            Duel.start()
+            G.tutorial = (not Harness.enabled) and not (G.records and G.records.seenTutorial) or nil
+        end
 
     elseif s == "duel" then
         local res = Duel.update(Input.forAnemone(G.p, G.r), Input.forAnemone(G.r, G.p))
+        if G.tutorial and ((G.p.hits or 0) > 0 or G.t > 8) then
+            G.tutorial = nil
+            G.records.seenTutorial = true
+            Save.store()
+        end
         if res then
             G.skResult = res
             local won = (res == "win")
@@ -120,14 +130,32 @@ local function tick()
                     G.state = "campaign"; G.t = 0; G.freeze = SMOKE_BUILD and 10 or 0
                     Sfx.chime()
                 else
-                    G.ladderIdx = G.ladderIdx + 1
-                    War.start(); toMap()
+                    G.spoilSel = 1
+                    G.state = "spoils"; G.t = 0; G.freeze = SMOKE_BUILD and 6 or 0
                 end
             else
                 G.campaignResult = "lost"; Harness.count("campaignLosses"); recordCampaign(false)
                 G.state = "campaign"; G.t = 0; G.freeze = SMOKE_BUILD and 10 or 0
                 Sfx.deflate()
             end
+        end
+
+    elseif s == "spoils" then
+        if not Harness.enabled then
+            if playdate.buttonJustPressed(playdate.kButtonLeft) then
+                G.spoilSel = ((G.spoilSel or 1) - 2) % 3 + 1
+            elseif playdate.buttonJustPressed(playdate.kButtonRight) then
+                G.spoilSel = (G.spoilSel or 1) % 3 + 1
+            end
+        else
+            G.spoilSel = (G.ladderIdx or 1) % 3 + 1   -- headless: vary the auto-pick
+        end
+        if advance(true) then
+            local id = ({ "tol", "sting", "feed" })[G.spoilSel or 1]
+            G.upgrades[id] = (G.upgrades[id] or 0) + 1
+            Harness.count("spoils")
+            G.ladderIdx = G.ladderIdx + 1
+            War.start(); toMap()
         end
 
     elseif s == "campaign" then

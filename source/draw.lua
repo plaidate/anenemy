@@ -99,6 +99,33 @@ local function drawAnemone(a)
         gfx.fillCircleAtPoint(cx + o[1], discY + o[2], 2)
     end
 
+    -- Phase 3: bracing draws a hunkered shell cap over the top of the disc; a
+    -- fresh deflect flashes a white ring
+    if (a.braceT or 0) > 0 then
+        gfx.setColor(gfx.kColorBlack); gfx.setLineWidth(3)
+        local rr, steps = r + 3, 10
+        for i = 0, steps - 1 do
+            local a0 = math.pi * (1 + i / steps)
+            local a1 = math.pi * (1 + (i + 1) / steps)
+            gfx.drawLine(cx + math.cos(a0) * rr, discY + math.sin(a0) * rr,
+                         cx + math.cos(a1) * rr, discY + math.sin(a1) * rr)
+        end
+        gfx.setLineWidth(1)
+    end
+    if (a.deflected or 0) > 0 then
+        a.deflected = a.deflected - 1
+        gfx.setColor(gfx.kColorWhite); gfx.drawCircleAtPoint(cx, discY, r + 5)
+    end
+    -- Phase 5: a lash broken by an incoming sting flashes a white X at the tip
+    if (a.interrupted or 0) > 0 then
+        a.interrupted = a.interrupted - 1
+        local fx = cx + a.facing * (r + 7)
+        gfx.setColor(gfx.kColorWhite); gfx.setLineWidth(2)
+        gfx.drawLine(fx - 4, discY - 10, fx + 4, discY - 2)
+        gfx.drawLine(fx + 4, discY - 10, fx - 4, discY - 2)
+        gfx.setLineWidth(1)
+    end
+
     drawTentacles(a, cx, discY, scaleY, contracted)
     if a.state ~= "deflating" and not contracted then drawAcrorhagi(a, cx, discY) end
 end
@@ -196,6 +223,12 @@ local function drawHUD()
     bar(mx, my, mw, 9, G.p.engorge or 0)
     local tick = mx + math.floor(mw * Anemone.connectFrac())
     gfx.drawLine(tick, my - 3, tick, my + 11)
+
+    if G.sudden then
+        gfx.setColor(gfx.kColorWhite); gfx.fillRect(cx - 46, 30, 92, 14)
+        gfx.setColor(gfx.kColorBlack); gfx.drawRect(cx - 46, 30, 92, 14)
+        gfx.drawTextAligned("SUDDEN DEATH", cx, 32, kTextAlignment.center)
+    end
 end
 
 local function drawMiniAnemone(cx, base, pat, ph)
@@ -265,6 +298,11 @@ local function drawMap()
         gfx.drawTextAligned(G.lastShift > 0 and "you pushed the border forward"
             or "the rival pushed you back", 200, 160, kTextAlignment.center)
     end
+    local up = G.upgrades or {}
+    if (up.tol or 0) + (up.sting or 0) + (up.feed or 0) > 0 then
+        gfx.drawTextAligned(string.format("boons   body +%d   venom +%d   gape +%d",
+            up.tol or 0, up.sting or 0, up.feed or 0), 200, 178, kTextAlignment.center)
+    end
     if not Harness.enabled then
         gfx.drawTextAligned("Ⓐ  fight the frontier", 200, 200, kTextAlignment.center)
     end
@@ -312,6 +350,49 @@ local function drawCampaign()
     if not Harness.enabled then gfx.drawTextAligned("\u{24b6}  a new shore", 200, 200, kTextAlignment.center) end
 end
 
+-- Phase 4: the spoils pick after a cleared rock. Three boons; d-pad selects, Ⓐ
+-- confirms. Stacks persist for the rest of the campaign (main applies them).
+local SPOILS = {
+    { name = "THICKER BODY",  desc = "+ tolerance" },
+    { name = "SHARPER VENOM", desc = "+ damage" },
+    { name = "WIDER GAPE",    desc = "+ feeding" },
+}
+local function drawSpoils()
+    gfx.setColor(gfx.kColorBlack)
+    gfx.drawTextAligned("SPOILS OF THE ROCK", 200, 24, kTextAlignment.center)
+    gfx.drawTextAligned("choose a boon for the shore ahead", 200, 46, kTextAlignment.center)
+    local cw, gp = 112, 10
+    local x0 = math.floor((C.W - (3 * cw + 2 * gp)) / 2)
+    for i = 1, 3 do
+        local x = x0 + (i - 1) * (cw + gp)
+        local cx = x + cw / 2
+        local sel = (G.spoilSel or 1) == i
+        gfx.setColor(gfx.kColorWhite); gfx.fillRect(x, 74, cw, 62)
+        gfx.setColor(gfx.kColorBlack); gfx.setLineWidth(sel and 4 or 1)
+        gfx.drawRect(x, 74, cw, 62); gfx.setLineWidth(1)
+        gfx.drawTextAligned(SPOILS[i].name, cx, 88, kTextAlignment.center)
+        gfx.drawTextAligned(SPOILS[i].desc, cx, 110, kTextAlignment.center)
+    end
+    local up = G.upgrades or {}
+    gfx.drawTextAligned(string.format("body +%d    venom +%d    gape +%d",
+        up.tol or 0, up.sting or 0, up.feed or 0), 200, 150, kTextAlignment.center)
+    if not Harness.enabled then
+        gfx.drawTextAligned("d-pad choose      \u{24b6} take it", 200, 200, kTextAlignment.center)
+    end
+end
+
+-- first-duel coaching: point at the connect tick, the one skill that carries the
+-- whole game. Shown once ever (save flag), dismissed on the first clean connect.
+local function drawTutorial()
+    local mx, mw, my = 130, 140, 220
+    local tick = mx + math.floor(mw * Anemone.connectFrac())
+    gfx.setColor(gfx.kColorWhite); gfx.fillRect(48, 150, 304, 38)
+    gfx.setColor(gfx.kColorBlack); gfx.drawRect(48, 150, 304, 38)
+    gfx.drawTextAligned("crank to engorge — charge PAST the tick", 200, 156, kTextAlignment.center)
+    gfx.drawTextAligned("to reach, then \u{24b6} to lash", 200, 172, kTextAlignment.center)
+    gfx.fillTriangle(tick, my - 20, tick - 5, my - 28, tick + 5, my - 28)   -- arrow down to the tick
+end
+
 function Draw.frame()
     gfx.clear(gfx.kColorWhite)
     local s = G.state
@@ -321,6 +402,8 @@ function Draw.frame()
         drawMap()
     elseif s == "warover" then
         drawWarOver()
+    elseif s == "spoils" then
+        drawSpoils()
     elseif s == "campaign" then
         drawCampaign()
     else
@@ -330,6 +413,10 @@ function Draw.frame()
         drawPredators()
         drawHUD()
         if s == "skirmish" then drawSkirmish() end
+        if G.tutorial then drawTutorial() end
+        if not Harness.enabled and playdate.isCrankDocked() then
+            playdate.ui.crankIndicator:draw()
+        end
     end
     gfx.setColor(gfx.kColorBlack)
 end

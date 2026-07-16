@@ -19,7 +19,11 @@ withdraws, and relocates. You command the front-line warrior polyps.
 - **Crank forward ⟳** — engorge your acrorhagi (raise charge → reach + sting).
 - **Crank back ⟲** — deflate the charge (save energy, bail out of a wind-up).
 - **Ⓐ** — release / lash across the gap with your current charge. Also confirms
-  on the title, map, and result screens.
+  on the title, map, spoils, and result screens.
+- **✛ right / left** — lean **in** on the rival or **back** off (see *Positioning*).
+- **Ⓑ** — **brace**: hunker down for a moment to deflect the gull's peck.
+
+*(If the crank is docked, an on-screen prompt reminds you it's the main control.)*
 
 ## How to play
 
@@ -41,7 +45,25 @@ over-feed and the rival pushes the boundary into you.
   crosses that anemone's **tolerance**, it deflates, withdraws, and the duel is
   yours. (You lose the same way.)
 - **Feed to refuel.** Between wind-ups, let your feeding tentacles catch the
-  drifting plankton — that regenerates your energy.
+  drifting plankton — that regenerates your energy. But **leaning in stops your
+  feeding**, so an aggressive posture has a hidden cost.
+
+## Positioning
+
+The gap between the two clones is not fixed. It **opens wider or narrower each
+skirmish** (whoever holds more of the rock presses their front line forward),
+and the **connect tick moves with it** — so read the tick fresh every fight.
+
+Within a duel you steer the gap yourself:
+
+- **✛ right — advance.** Creep toward the rival. The gap shrinks, so a *lower*
+  charge now reaches — but you slide into the rival's reach too, it **burns
+  energy**, and it **stops you feeding**. A committing, aggressive stance.
+- **✛ left — retreat.** Back off. The gap opens, your lashes need more charge to
+  land, but you're safer and free to feed. A patient, defensive stance.
+
+If neither clone can end it, a **sudden-death** clock eventually erodes both
+tolerances until someone deflates — no more endless stalemates.
 
 ## The tide
 
@@ -57,7 +79,8 @@ Tide is the master clock, shown on the gauge.
 
 - **Gull** — dives from above and **pecks** the rock, adding a jolt of sting to
   whichever anemone it hits. It alternates which side it stoops on. Watch its
-  telegraph.
+  telegraph and **tap Ⓑ to brace** as it strikes — a well-timed brace deflects
+  the peck entirely (a shell cap flashes over you).
 - **Aeolidia nudibranch** — a sea slug that crawls along the bared rock toward
   the richer, fatter clone and **grazes** it, draining energy as it feeds.
 
@@ -79,17 +102,25 @@ between your clone and the rival's.
 ## The campaign — rival strains
 
 Clear a rock and a new rival clone claims the next one. Each **strain** fights
-with its own personality (told apart by its dither pattern):
+with its own personality — not just different numbers, but a **different brain**
+(told apart by its dither pattern):
 
-- **Actinia — the glass cannon.** Low tolerance, vicious sting. Deflates fast,
-  but so will you if you trade blindly. Punish its recovery windows.
-- **Metridium — the economy tank.** Feeds fast and endures a huge sting total.
-  You won't out-attrition it head-on; make every lash a well-charged one and
-  starve it of openings.
-- **Urticina — the attrition wall.** Tough and partly **resistant** to your
-  venom, so raw damage bleeds off. Patience and clean connects.
-- **The Aggressor — the boss.** A nudibranch-strain bruiser: heavy sting, high
-  resistance. Hold your charge, pick your moment, and don't get greedy.
+- **Actinia — the glass cannon.** Over-commits: charges fast, presses in, and
+  pounces the instant you're open — even while you're feeding. Low tolerance,
+  vicious sting. Punish its recovery windows before it punishes yours.
+- **Metridium — the economy tank.** Turtles: banks a huge energy buffer,
+  **retreats to feed**, and only lashes on a clean opening. Endures a vast sting
+  total. Starve it of openings and out-charge it.
+- **Urticina — the attrition wall.** Holds the midline, patient, and partly
+  **resistant** to your venom so raw damage bleeds off. Win on clean connects.
+- **The Aggressor — the boss.** Presses greedily from behind heavy resistance.
+  Hold your charge, pick your moment, and don't get baited into trading.
+
+### Spoils
+
+Clear a rock and you **choose one boon** — *thicker body* (more tolerance),
+*sharper venom* (harder lashes), or *wider gape* (faster feeding). Boons stack
+for the rest of that campaign, so shape your clone toward the fights ahead.
 
 Win a whole campaign and your record persists between sessions (best strains
 cleared, campaigns won).

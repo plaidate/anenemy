@@ -56,10 +56,16 @@ local function updateGull(dt)
     elseif g.f == dive + 1 then
         local a = nearest(g.x)
         if math.abs(a.x - g.x) <= C.GULL_HIT_X and a.state ~= "deflating" then
-            a.sting = a.sting + C.GULL_STING
-            a.hurtT = math.max(a.hurtT, 4)
-            Harness.count("gullPecks")
-            Sfx.peck()
+            if (a.braceT or 0) > 0 then
+                a.deflected = 6                 -- brief visual flash of the deflect
+                Harness.count("braces")
+                Sfx.whiff()
+            else
+                a.sting = a.sting + C.GULL_STING
+                a.hurtT = math.max(a.hurtT, 4)
+                Harness.count("gullPecks")
+                Sfx.peck()
+            end
         end
     else
         g.y = g.y - 9

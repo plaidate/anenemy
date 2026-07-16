@@ -16,9 +16,29 @@ C = {
 
     BASE_Y = 150,          -- oral-disc anchor height
     ROCK_Y = 178,          -- rock surface line (feet of the column)
-    PLAYER_X = 112,
+    CENTER_X = 200,        -- no-man's-land midline; spawns are symmetric about it
+    PLAYER_X = 112,        -- (legacy default spawn; live spawn now varies per skirmish)
     RIVAL_X = 288,
     BODY_R = 30,           -- oral-disc radius (the hurt zone)
+
+    -- Phase 1: spawn spread (half-gap from centre). Varies per skirmish with the
+    -- boundary + jitter, so the connect tick moves fight-to-fight. half=88 -> the
+    -- classic 116px edge gap (connect ~0.62). Clamped so the tick stays skillful.
+    SPREAD_BASE = 88,
+    SPREAD_PER_CELL = 5,   -- press forward (narrower) per net cell you hold
+    SPREAD_JITTER = 12,    -- +/- 6px opening randomness
+    SPREAD_MIN = 70,       -- gap 80 -> connect ~0.35
+    SPREAD_MAX = 100,      -- gap 140 -> connect ~0.80
+
+    -- Phase 1: within-duel positioning (d-pad lean toward/away the foe)
+    LEAN_SPEED = 0.9,      -- px/frame the front line creeps
+    LEAN_MAX = 14,         -- furthest you may advance past home
+    LEAN_MIN = -14,        -- furthest you may retreat behind home
+    LEAN_DRAIN = 0.30,     -- energy/frame while actively advancing
+
+    -- Phase 1: sudden-death clock (no more passive stalemates)
+    DUEL_SECONDS = 45,     -- after this, tolerance decays until someone deflates
+    SUDDEN_DECAY = 0.5,    -- tolerance lost per frame in sudden death
 
     MAX_ENERGY = 100,
     START_ENERGY = 55,
@@ -62,6 +82,7 @@ C = {
     GULL_DIVE_FRAMES = 26,
     GULL_STING = 10,
     GULL_HIT_X = 34,
+    BRACE_FRAMES = 8,      -- Phase 3: i-frames vs the gull peck after a brace input
     SLUG_SPEED = 0.75,
     SLUG_CONTACT = 30,
     SLUG_DRAIN = 0.35,
@@ -72,6 +93,11 @@ C = {
     START_OWNED = 3,            -- cells you start holding (rival gets the rest)
     TERRITORY_ENERGY = 4,       -- start-energy edge per net cell held (reinforcements)
     MAX_SKIRMISHES = 40,        -- headless safety: force-resolve a war after this many
+
+    -- Phase 4: spoils (one player boon per cleared rock; reset each campaign)
+    SPOIL_TOL = 25,             -- +sting tolerance per THICKER BODY pick
+    SPOIL_STING = 6,            -- +lash stingGain per SHARPER VENOM pick
+    SPOIL_FEED = 0.25,          -- +feed multiplier per WIDER GAPE pick
 
     -- Phase 4: roster
     STRAIN_TOL_MUL = 1,         -- scales rival strain tolerance (smoke shrinks it)
@@ -90,6 +116,7 @@ if SMOKE_BUILD then
     C.MAX_SKIRMISHES = 24
     C.TOLERANCE = 72
     C.STRAIN_TOL_MUL = 0.5
+    C.DUEL_SECONDS = 22        -- backstop headless duels that fail to resolve on damage
 end
 
 G = {}

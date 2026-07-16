@@ -32,7 +32,8 @@ local STEP_FRAMES = 6
 local acc, step = 0, 0
 
 function Music.update()
-    if not (Music.on and (not Sfx or Sfx.on ~= false)) then return end
+    if not Music.on then return end
+    if Sfx and Sfx.on == false then return end   -- the menu toggle silences both
     if G.state ~= "duel" then return end
     acc = acc + 1
     if acc < STEP_FRAMES then return end

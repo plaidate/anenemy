@@ -6,9 +6,16 @@ Input = {}
 local pd <const> = playdate
 
 function Input.player()
+    -- the player anemone always faces right, so d-pad right = advance on the foe,
+    -- left = retreat (Phase 1 positioning)
+    local adv = 0
+    if pd.buttonIsPressed(pd.kButtonRight) then adv = 1
+    elseif pd.buttonIsPressed(pd.kButtonLeft) then adv = -1 end
     return {
         engorgeDelta = pd.getCrankChange() * C.ENGORGE_PER_DEG,
         strike = pd.buttonJustPressed(pd.kButtonA),
+        advance = adv,
+        brace = pd.buttonJustPressed(pd.kButtonB),   -- Phase 3: duck the gull peck
     }
 end
 
